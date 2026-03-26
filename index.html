@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Editor ALENIS</title>
+  <title>Alenis</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #080c14;
-      --surface: #0f1520;
-      --panel: #141c2e;
-      --border: #1e2d4a;
-      --accent: #1d6fe8;
-      --accent2: #00d4ff;
-      --text: #e8f0ff;
-      --muted: #5a7090;
-      --danger: #ff4060;
+      --bg: #120808;
+      --surface: #1a0a0a;
+      --panel: #1e0e0e;
+      --border: #3a1818;
+      --accent: #e01d1d;
+      --accent2: #ff6060;
+      --text: #ffe8e8;
+      --muted: #7a5050;
+      --danger: #ff9020;
       --success: #00e676;
       --radius: 12px;
       --panel-w: 280px;
@@ -31,7 +31,6 @@
       font-family: 'DM Sans', sans-serif;
     }
 
-    /* ── LAYOUT ── */
     #app {
       display: grid;
       grid-template-rows: auto 1fr auto;
@@ -51,17 +50,12 @@
     }
     #header h1 {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.6rem;
-      letter-spacing: 3px;
+      font-size: 1.7rem;
+      letter-spacing: 4px;
       background: linear-gradient(135deg, var(--accent2), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       flex-shrink: 0;
-    }
-    #header-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
     }
     .upload-label {
       display: flex;
@@ -77,17 +71,17 @@
       white-space: nowrap;
       transition: background 0.2s;
     }
-    .upload-label:hover { background: #2d7df5; }
+    .upload-label:hover { background: #f03030; }
     #fileInput { display: none; }
 
-    /* ── MIDDLE AREA ── */
+    /* ── MIDDLE ── */
     #middle {
       display: flex;
       overflow: hidden;
       position: relative;
     }
 
-    /* ── CANVAS ZONE ── */
+    /* ── CANVAS ── */
     #canvasZone {
       flex: 1;
       display: flex;
@@ -105,7 +99,7 @@
       background: #000;
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 0 0 1px var(--border), 0 20px 60px rgba(0,0,0,0.7);
+      box-shadow: 0 0 0 1px var(--border), 0 20px 60px rgba(0,0,0,0.8);
       touch-action: none;
     }
     canvas {
@@ -113,10 +107,10 @@
       height: 100%;
       cursor: grab;
       display: block;
+      image-rendering: high-quality;
     }
     canvas.dragging { cursor: grabbing; }
 
-    /* Empty state */
     #emptyState {
       position: absolute;
       inset: 0;
@@ -129,9 +123,9 @@
       pointer-events: none;
     }
     #emptyState svg { opacity: 0.3; }
-    #emptyState p { font-size: 0.9rem; text-align: center; }
+    #emptyState p { font-size: 0.9rem; text-align: center; line-height: 1.5; }
 
-    /* Nav arrows */
+    /* Nav */
     #navRow {
       display: flex;
       gap: 10px;
@@ -142,10 +136,10 @@
       border: 1px solid var(--border);
       color: var(--text);
       border-radius: 8px;
-      padding: 8px 18px;
+      padding: 8px 20px;
       cursor: pointer;
-      font-size: 1.1rem;
-      transition: background 0.2s;
+      font-size: 1.2rem;
+      transition: background 0.15s;
       min-width: 48px;
     }
     .navBtn:hover, .navBtn:active { background: var(--border); }
@@ -203,14 +197,16 @@
     }
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 16px; height: 16px;
+      width: 18px; height: 18px;
       border-radius: 50%;
       background: var(--accent);
       border: 2px solid var(--accent2);
       cursor: pointer;
+      transition: transform 0.1s;
     }
+    input[type=range]:active::-webkit-slider-thumb { transform: scale(1.3); }
     input[type=range]::-moz-range-thumb {
-      width: 16px; height: 16px;
+      width: 18px; height: 18px;
       border-radius: 50%;
       background: var(--accent);
       border: 2px solid var(--accent2);
@@ -219,28 +215,28 @@
     .panel-btn {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       width: 100%;
-      padding: 10px 12px;
+      padding: 11px 12px;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: transparent;
       color: var(--text);
       cursor: pointer;
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
       transition: all 0.15s;
       margin-top: 2px;
     }
     .panel-btn:hover, .panel-btn:active { background: var(--border); }
-    .panel-btn.primary { background: var(--accent); border-color: var(--accent); }
-    .panel-btn.primary:hover { background: #2d7df5; }
-    .panel-btn.danger { border-color: var(--danger); color: var(--danger); }
-    .panel-btn.danger:hover { background: rgba(255,64,96,0.12); }
-    .panel-btn.success { border-color: var(--success); color: var(--success); }
-    .panel-btn.success:hover { background: rgba(0,230,118,0.1); }
+    .panel-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .panel-btn.primary:hover { background: #f03030; }
+    .panel-btn.reset { border-color: var(--danger); color: var(--danger); }
+    .panel-btn.reset:hover { background: rgba(255,144,32,0.1); }
 
-    /* ── BOTTOM TOOLBAR (mobile) ── */
+    /* ── BOTTOM BAR (mobile) ── */
     #bottomBar {
       display: none;
       background: var(--surface);
@@ -250,7 +246,6 @@
     #tabRow {
       display: flex;
       justify-content: space-around;
-      padding: 0;
     }
     .tab-btn {
       flex: 1;
@@ -273,18 +268,24 @@
     .tab-btn.active { color: var(--accent2); }
     .tab-btn svg { width: 22px; height: 22px; }
 
-    /* Slide-up sheet */
+    /* ── SLIDE-UP SHEET (mobile) ── */
     #sheet {
-      display: none;
       position: fixed;
       inset: 0;
       z-index: 100;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    #sheet.open {
+      pointer-events: all;
+      opacity: 1;
     }
     #sheetBackdrop {
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(3px);
     }
     #sheetContent {
       position: absolute;
@@ -292,35 +293,39 @@
       background: var(--panel);
       border-top: 1px solid var(--border);
       border-radius: 20px 20px 0 0;
-      padding: 16px 18px 28px;
-      max-height: 72dvh;
+      padding: 12px 18px 32px;
+      max-height: 78dvh;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
+      transform: translateY(30px);
+      transition: transform 0.25s;
     }
+    #sheet.open #sheetContent { transform: translateY(0); }
+
     .sheet-handle {
       width: 40px; height: 4px;
       background: var(--border);
       border-radius: 2px;
-      margin: 0 auto 10px;
+      margin: 0 auto 8px;
+      flex-shrink: 0;
     }
     #sheetTitle {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       letter-spacing: 2px;
       color: var(--accent2);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
+      flex-shrink: 0;
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 680px) {
-      #sidePanel { display: none; }
-      #bottomBar { display: block; }
-      #canvasWrap {
-        width: min(92vw, 92svw);
-        height: min(92vw, 92svw);
-      }
+    /* Sheet sliders bigger touch targets */
+    #sheetBody input[type=range] {
+      height: 6px;
+    }
+    #sheetBody input[type=range]::-webkit-slider-thumb {
+      width: 24px; height: 24px;
     }
 
     /* Scrollbar */
@@ -331,13 +336,13 @@
     /* Toast */
     #toast {
       position: fixed;
-      bottom: 80px;
+      bottom: 90px;
       left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: #1a2740;
+      transform: translateX(-50%) translateY(10px);
+      background: #2a0a0a;
       border: 1px solid var(--accent);
       color: var(--text);
-      padding: 10px 20px;
+      padding: 10px 22px;
       border-radius: 100px;
       font-size: 0.82rem;
       opacity: 0;
@@ -346,36 +351,36 @@
       white-space: nowrap;
       z-index: 999;
     }
-    #toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 680px) {
+      #sidePanel { display: none; }
+      #bottomBar { display: block; }
+      #canvasWrap {
+        width: min(94vw, 94svw);
+        height: min(94vw, 94svw);
+      }
     }
   </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- HEADER -->
   <header id="header">
-    <h1>✦ ALENIS EDITOR</h1>
-    <div id="header-actions">
-      <label class="upload-label" for="fileInput">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Subir fotos
-      </label>
-      <input type="file" id="fileInput" accept="image/*" multiple>
-    </div>
+    <h1>✦ ALENIS</h1>
+    <label class="upload-label" for="fileInput">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Subir fotos
+    </label>
+    <input type="file" id="fileInput" accept="image/*" multiple>
   </header>
 
-  <!-- MIDDLE -->
   <div id="middle">
-
-    <!-- CANVAS -->
     <div id="canvasZone">
       <div id="canvasWrap">
         <canvas id="editorCanvas" width="1080" height="1080"></canvas>
         <div id="emptyState">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           <p>Sube tus fotos<br>para comenzar</p>
         </div>
       </div>
@@ -386,7 +391,7 @@
       </div>
     </div>
 
-    <!-- SIDE PANEL (desktop) -->
+    <!-- SIDE PANEL desktop -->
     <aside id="sidePanel">
       <p class="section-title">Ajustes</p>
       <div class="slider-row"><div class="slider-label"><span>☀ Brillo</span><span class="slider-val" id="valBrightness">1.00</span></div><input type="range" id="brightness" min="0" max="2" step="0.01" value="1"></div>
@@ -396,21 +401,21 @@
       <div class="slider-row"><div class="slider-label"><span>◉ Viñeta</span><span class="slider-val" id="valVignette">0.00</span></div><input type="range" id="vignette" min="0" max="1" step="0.01" value="0"></div>
       <div class="slider-row"><div class="slider-label"><span>⊕ Zoom</span><span class="slider-val" id="valZoom">1.00</span></div><input type="range" id="zoom" min="0.5" max="3" step="0.01" value="1"></div>
 
-      <p class="section-title" style="margin-top:14px">Acciones</p>
-      <button class="panel-btn danger" id="resetBtn">↺ Reiniciar ajustes</button>
+      <p class="section-title" style="margin-top:14px">Guardar</p>
       <button class="panel-btn primary" id="downloadBtn">↓ Descargar imagen</button>
-      <button class="panel-btn success" id="downloadAllBtn">↓ Descargar todas (.zip)</button>
+      <button class="panel-btn primary" id="downloadAllBtn">↓ Descargar todas</button>
+      <button class="panel-btn reset" id="resetBtn">↺ Reiniciar ajustes</button>
     </aside>
   </div>
 
-  <!-- BOTTOM BAR (mobile) -->
+  <!-- BOTTOM BAR mobile -->
   <div id="bottomBar">
     <div id="tabRow">
-      <button class="tab-btn active" data-sheet="ajustes">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      <button class="tab-btn" data-sheet="ajustes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
         Ajustes
       </button>
-      <button class="tab-btn" data-sheet="acciones">
+      <button class="tab-btn" data-sheet="guardar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
         Guardar
       </button>
@@ -418,7 +423,7 @@
   </div>
 </div>
 
-<!-- SHEET (mobile) -->
+<!-- SHEET -->
 <div id="sheet">
   <div id="sheetBackdrop"></div>
   <div id="sheetContent">
@@ -428,20 +433,14 @@
   </div>
 </div>
 
-<!-- TOAST -->
 <div id="toast"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script>
-const FRAME_SRC = 'nasa.png';
+const canvas  = document.getElementById('editorCanvas');
+const ctx     = canvas.getContext('2d');
+const empty   = document.getElementById('emptyState');
+const counter = document.getElementById('imgCounter');
 
-const canvas   = document.getElementById('editorCanvas');
-const ctx      = canvas.getContext('2d');
-const empty    = document.getElementById('emptyState');
-const counter  = document.getElementById('imgCounter');
-
-// Sliders (desktop)
 const sliders = {
   brightness: document.getElementById('brightness'),
   contrast:   document.getElementById('contrast'),
@@ -463,32 +462,31 @@ const DEFAULTS = { brightness:1, contrast:1, saturation:1, sharpness:0, vignette
 
 let images = [], currentIndex = 0;
 let offsetX = 0, offsetY = 0;
-let isDragging = false;
-let startX, startY;
-let lastDist = null; // pinch zoom
+let isDragging = false, startX, startY, lastDist = null;
+let raf = null;
 
-// Frame
 const frameImage = new Image();
-frameImage.src = FRAME_SRC;
+frameImage.src = 'nasa.png';
 frameImage.onload = draw;
 
 // ── FILE INPUT ──
 document.getElementById('fileInput').addEventListener('change', e => {
-  images = [];
   const files = e.target.files;
   if (!files.length) return;
+  images = new Array(files.length);
   let loaded = 0;
   for (let i = 0; i < files.length; i++) {
+    const idx = i;
     const img = new Image();
     img.onload = () => {
-      images[i] = { img, filters: { ...DEFAULTS } };
+      images[idx] = { img, filters: { ...DEFAULTS } };
       loaded++;
       if (loaded === files.length) {
         images = images.filter(Boolean);
         currentIndex = 0;
         syncSliders();
         draw();
-        toast(`${files.length} foto${files.length>1?'s':''} cargada${files.length>1?'s':''}`);
+        toast(`${files.length} foto${files.length>1?'s':''} cargada${files.length>1?'s':''} ✓`);
       }
     };
     img.src = URL.createObjectURL(files[i]);
@@ -498,7 +496,6 @@ document.getElementById('fileInput').addEventListener('change', e => {
 // ── NAV ──
 document.getElementById('prevBtn').addEventListener('click', () => navigate(-1));
 document.getElementById('nextBtn').addEventListener('click', () => navigate(1));
-
 function navigate(dir) {
   if (!images.length) return;
   saveFilters();
@@ -516,12 +513,21 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   toast('Ajustes reiniciados');
 });
 
-// ── DOWNLOAD ──
+// ── DOWNLOAD CURRENT ──
 document.getElementById('downloadBtn').addEventListener('click', exportCurrent);
+
+// ── DOWNLOAD ALL (individual, one by one) ──
 document.getElementById('downloadAllBtn').addEventListener('click', exportAll);
 
-// ── SLIDERS ──
-Object.values(sliders).forEach(s => s.addEventListener('input', () => { updateVals(); draw(); }));
+// ── SLIDERS live update ──
+Object.values(sliders).forEach(s => {
+  s.addEventListener('input', () => { updateVals(); scheduleDraw(); });
+});
+
+function scheduleDraw() {
+  if (raf) cancelAnimationFrame(raf);
+  raf = requestAnimationFrame(draw);
+}
 
 function updateVals() {
   Object.keys(sliders).forEach(k => {
@@ -548,17 +554,17 @@ function saveFilters() {
 function syncSliders() {
   if (!images.length) return;
   const f = images[currentIndex].filters;
-  Object.keys(sliders).forEach(k => { if (sliders[k] && f[k] !== undefined) sliders[k].value = f[k]; });
+  Object.keys(sliders).forEach(k => { if (f[k] !== undefined) sliders[k].value = f[k]; });
   offsetX = f.offsetX; offsetY = f.offsetY;
   updateVals();
   counter.textContent = `${currentIndex+1} / ${images.length}`;
   empty.style.display = 'none';
-  // also sync sheet sliders if open
   syncSheetSliders();
 }
 
 // ── DRAW ──
 function draw() {
+  raf = null;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (!images.length) {
     empty.style.display = 'flex';
@@ -566,26 +572,35 @@ function draw() {
     return;
   }
   empty.style.display = 'none';
-  counter.textContent = `${currentIndex+1} / ${images.length}`;
 
   const { img } = images[currentIndex];
   const f = getFilters();
 
+  // Draw photo with filters
   ctx.save();
   ctx.translate(canvas.width/2 + offsetX, canvas.height/2 + offsetY);
   ctx.scale(f.zoom, f.zoom);
   ctx.filter = `brightness(${f.brightness}) contrast(${f.contrast}) saturate(${f.saturation})`;
 
-  const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
-  ctx.drawImage(img, -(img.width*scale)/2, -(img.height*scale)/2, img.width*scale, img.height*scale);
+  const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+  ctx.drawImage(img,
+    -(img.width * scale) / 2,
+    -(img.height * scale) / 2,
+    img.width * scale,
+    img.height * scale
+  );
   ctx.restore();
 
-  ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
+  // Frame on top
+  if (frameImage.complete && frameImage.naturalWidth) {
+    ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
+  }
 
+  // Vignette
   if (f.vignette > 0) {
     const grd = ctx.createRadialGradient(
       canvas.width/2, canvas.height/2, canvas.width/2*(1-f.vignette),
-      canvas.width/2, canvas.height/2, canvas.width/2
+      canvas.width/2, canvas.height/2, canvas.width/2*1.4
     );
     grd.addColorStop(0, 'rgba(0,0,0,0)');
     grd.addColorStop(1, `rgba(0,0,0,${f.vignette})`);
@@ -594,7 +609,7 @@ function draw() {
   }
 }
 
-// ── MOUSE DRAG ──
+// ── MOUSE ──
 canvas.addEventListener('mousedown', e => {
   isDragging = true;
   canvas.classList.add('dragging');
@@ -604,41 +619,36 @@ canvas.addEventListener('mouseup', () => { isDragging = false; canvas.classList.
 canvas.addEventListener('mouseleave', () => { isDragging = false; canvas.classList.remove('dragging'); });
 canvas.addEventListener('mousemove', e => {
   if (!isDragging) return;
-  const rect = canvas.getBoundingClientRect();
-  const sx = canvas.width / rect.width;
-  const sy = canvas.height / rect.height;
+  const r = canvas.getBoundingClientRect();
+  const sx = canvas.width / r.width, sy = canvas.height / r.height;
   offsetX += (e.offsetX - startX) * sx;
   offsetY += (e.offsetY - startY) * sy;
   startX = e.offsetX; startY = e.offsetY;
-  draw();
+  scheduleDraw();
 });
 
-// ── TOUCH DRAG + PINCH ZOOM ──
-function getTouchPos(e, idx=0) {
-  const rect = canvas.getBoundingClientRect();
-  const sx = canvas.width / rect.width;
-  const sy = canvas.height / rect.height;
+// ── TOUCH ──
+function getTouchPos(e, i=0) {
+  const r = canvas.getBoundingClientRect();
   return {
-    x: (e.touches[idx].clientX - rect.left) * sx,
-    y: (e.touches[idx].clientY - rect.top) * sy
+    x: (e.touches[i].clientX - r.left) * (canvas.width / r.width),
+    y: (e.touches[i].clientY - r.top) * (canvas.height / r.height)
   };
 }
-function dist(e) {
-  const dx = e.touches[0].clientX - e.touches[1].clientX;
-  const dy = e.touches[0].clientY - e.touches[1].clientY;
-  return Math.hypot(dx, dy);
+function touchDist(e) {
+  return Math.hypot(
+    e.touches[0].clientX - e.touches[1].clientX,
+    e.touches[0].clientY - e.touches[1].clientY
+  );
 }
-
 canvas.addEventListener('touchstart', e => {
   e.preventDefault();
   if (e.touches.length === 1) {
-    isDragging = true;
-    const p = getTouchPos(e);
-    startX = p.x; startY = p.y;
-    lastDist = null;
+    isDragging = true; lastDist = null;
+    const p = getTouchPos(e); startX = p.x; startY = p.y;
   } else if (e.touches.length === 2) {
     isDragging = false;
-    lastDist = dist(e);
+    lastDist = touchDist(e);
   }
 }, { passive: false });
 
@@ -646,66 +656,99 @@ canvas.addEventListener('touchmove', e => {
   e.preventDefault();
   if (e.touches.length === 1 && isDragging) {
     const p = getTouchPos(e);
-    offsetX += p.x - startX;
-    offsetY += p.y - startY;
+    offsetX += p.x - startX; offsetY += p.y - startY;
     startX = p.x; startY = p.y;
-    draw();
+    scheduleDraw();
   } else if (e.touches.length === 2 && lastDist !== null) {
-    const d = dist(e);
-    const delta = d / lastDist;
-    let z = parseFloat(sliders.zoom.value) * delta;
+    const d = touchDist(e);
+    let z = parseFloat(sliders.zoom.value) * (d / lastDist);
     z = Math.min(Math.max(z, 0.5), 3);
     sliders.zoom.value = z;
     vals.zoom.textContent = z.toFixed(2);
-    // sync sheet if open
-    const sheetZoom = document.getElementById('sheet-zoom');
-    if (sheetZoom) { sheetZoom.value = z; document.getElementById('sheet-val-zoom').textContent = z.toFixed(2); }
+    // sync sheet zoom if open
+    const sz = document.getElementById('sheet-zoom');
+    if (sz) { sz.value = z; document.getElementById('sheet-val-zoom').textContent = z.toFixed(2); }
     lastDist = d;
-    draw();
+    scheduleDraw();
   }
 }, { passive: false });
 
-canvas.addEventListener('touchend', e => {
-  isDragging = false;
-  lastDist = null;
-  saveFilters();
-});
+canvas.addEventListener('touchend', () => { isDragging = false; lastDist = null; saveFilters(); });
 
-// ── EXPORT ──
+// ── EXPORT CURRENT ──
 function exportCurrent() {
-  if (!images.length) { toast('No hay imagen'); return; }
+  if (!images.length) { toast('No hay imagen cargada'); return; }
+  saveFilters();
   draw();
-  canvas.toBlob(blob => {
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `alenis_editada_${currentIndex+1}.png`;
-    a.click();
-    toast('¡Imagen descargada!');
-  }, 'image/png');
+  requestAnimationFrame(() => {
+    canvas.toBlob(blob => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `aleniz_${currentIndex+1}.png`;
+      a.click();
+      toast('¡Imagen descargada! ✓');
+    }, 'image/png');
+  });
 }
 
+// ── EXPORT ALL (one by one, sequential) ──
 async function exportAll() {
   if (!images.length) { toast('No hay imágenes'); return; }
-  toast('Generando ZIP…');
-  const zip = new JSZip();
   const saved = { index: currentIndex, offsetX, offsetY };
+  toast(`Descargando ${images.length} imagen${images.length>1?'es':''}…`);
+
   for (let i = 0; i < images.length; i++) {
     currentIndex = i;
     syncSliders();
     draw();
-    await new Promise(r => setTimeout(r, 30)); // let canvas paint
+    await new Promise(r => setTimeout(r, 60));
     const dataURL = canvas.toDataURL('image/png');
-    zip.file(`alenis_editada_${i+1}.png`, dataURL.split(',')[1], { base64: true });
+    const a = document.createElement('a');
+    a.href = dataURL;
+    a.download = `aleniz_${i+1}.png`;
+    a.click();
+    await new Promise(r => setTimeout(r, 300)); // gap between downloads
   }
+
   currentIndex = saved.index;
+  offsetX = saved.offsetX; offsetY = saved.offsetY;
   syncSliders();
   draw();
-  const content = await zip.generateAsync({ type: 'blob' });
-  saveAs(content, 'alenis_editadas.zip');
-  toast('¡ZIP descargado!');
+  toast(`✓ ${images.length} imagen${images.length>1?'es':''} descargada${images.length>1?'s':''}`);
 }
 
 // ── MOBILE SHEET ──
+function sliderHTML(id, label, min, max, step) {
+  const f = images.length ? images[currentIndex].filters : DEFAULTS;
+  const v = (f[id] !== undefined ? f[id] : DEFAULTS[id]);
+  return `
+    <div class="slider-row">
+      <div class="slider-label">
+        <span>${label}</span>
+        <span class="slider-val" id="sheet-val-${id}">${parseFloat(v).toFixed(2)}</span>
+      </div>
+      <input type="range" id="sheet-${id}" min="${min}" max="${max}" step="${step}" value="${v}"
+        oninput="sheetSlide('${id}',this.value)">
+    </div>`;
+}
+
+// Sheet slide: update desktop slider + redraw immediately
+function sheetSlide(key, val) {
+  val = parseFloat(val);
+  document.getElementById(`sheet-val-${key}`).textContent = val.toFixed(2);
+  sliders[key].value = val;
+  vals[key].textContent = val.toFixed(2);
+  scheduleDraw(); // live update on canvas behind the sheet
+}
+
+function sheetReset() {
+  if (!images.length) return;
+  images[currentIndex].filters = { ...DEFAULTS };
+  syncSliders(); // also syncs sheet sliders
+  scheduleDraw();
+  toast('Ajustes reiniciados');
+}
+
 const SHEET_CONFIG = {
   ajustes: {
     title: 'AJUSTES',
@@ -716,44 +759,17 @@ const SHEET_CONFIG = {
       ${sliderHTML('sharpness','⬡ Nitidez','0','1','0.01')}
       ${sliderHTML('vignette','◉ Viñeta','0','1','0.01')}
       ${sliderHTML('zoom','⊕ Zoom','0.5','3','0.01')}
-      <button class="panel-btn danger" onclick="sheetReset()" style="margin-top:10px">↺ Reiniciar ajustes</button>
+      <button class="panel-btn reset" onclick="sheetReset()" style="margin-top:8px">↺ Reiniciar</button>
     `
   },
-  acciones: {
+  guardar: {
     title: 'GUARDAR',
     html: () => `
-      <button class="panel-btn primary" onclick="exportCurrent();closeSheet()" style="padding:14px 12px;font-size:0.9rem">↓ Descargar imagen actual</button>
-      <button class="panel-btn success" onclick="exportAll();closeSheet()" style="padding:14px 12px;font-size:0.9rem">↓ Descargar todas (.zip)</button>
+      <button class="panel-btn primary" onclick="exportCurrent()" style="padding:15px;font-size:0.9rem">↓ Descargar esta imagen</button>
+      <button class="panel-btn primary" onclick="exportAll()" style="padding:15px;font-size:0.9rem;margin-top:4px">↓ Descargar todas</button>
     `
   }
 };
-
-function sliderHTML(id, label, min, max, step) {
-  const f = images.length ? images[currentIndex].filters : DEFAULTS;
-  const v = f[id] !== undefined ? f[id] : DEFAULTS[id];
-  return `
-    <div class="slider-row">
-      <div class="slider-label"><span>${label}</span><span class="slider-val" id="sheet-val-${id}">${parseFloat(v).toFixed(2)}</span></div>
-      <input type="range" id="sheet-${id}" min="${min}" max="${max}" step="${step}" value="${v}"
-        oninput="sheetSlide('${id}',this.value)">
-    </div>`;
-}
-
-function sheetSlide(key, val) {
-  val = parseFloat(val);
-  document.getElementById(`sheet-val-${key}`).textContent = val.toFixed(2);
-  sliders[key].value = val;
-  vals[key].textContent = val.toFixed(2);
-  draw();
-}
-
-function sheetReset() {
-  if (!images.length) return;
-  images[currentIndex].filters = { ...DEFAULTS };
-  syncSliders();
-  draw();
-  toast('Ajustes reiniciados');
-}
 
 function syncSheetSliders() {
   if (!images.length) return;
@@ -761,15 +777,18 @@ function syncSheetSliders() {
   Object.keys(sliders).forEach(k => {
     const el = document.getElementById(`sheet-${k}`);
     const vel = document.getElementById(`sheet-val-${k}`);
-    if (el) { el.value = f[k]; vel.textContent = parseFloat(f[k]).toFixed(2); }
+    if (el && vel) { el.value = f[k]; vel.textContent = parseFloat(f[k]).toFixed(2); }
   });
 }
 
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
+    const name = btn.dataset.sheet;
+    const already = btn.classList.contains('active');
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    if (already) { closeSheet(); return; }
     btn.classList.add('active');
-    openSheet(btn.dataset.sheet);
+    openSheet(name);
   });
 });
 
@@ -777,22 +796,22 @@ function openSheet(name) {
   const cfg = SHEET_CONFIG[name];
   document.getElementById('sheetTitle').textContent = cfg.title;
   document.getElementById('sheetBody').innerHTML = cfg.html();
-  document.getElementById('sheet').style.display = 'block';
+  document.getElementById('sheet').classList.add('open');
 }
-
 function closeSheet() {
-  document.getElementById('sheet').style.display = 'none';
+  document.getElementById('sheet').classList.remove('open');
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
 }
-
 document.getElementById('sheetBackdrop').addEventListener('click', closeSheet);
 
 // ── TOAST ──
+let toastTimer;
 function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
 updateVals();
